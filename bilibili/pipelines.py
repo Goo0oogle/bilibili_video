@@ -52,7 +52,7 @@ class PostgrePipeline(object):
                 imgsrc,\
                 username,\
                 userimgsrc,\
-                usercontent,\
+                usercontent\
             ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             %(
                 item['Id'],
