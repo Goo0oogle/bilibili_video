@@ -35,7 +35,8 @@ class PostgrePipeline(object):
         print('Cursor is creating...')
         self.cursor = self.db.cursor()
         print('processing items...') 
-        self.cursor.execute(
+        # self.cursor.execute(
+        print(
             "insert into videoinfo\
             (\
                 id,\
