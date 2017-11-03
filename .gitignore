@@ -1,0 +1,3 @@
+ghostdriver.log
+bilibili/__pycache__/*.pyc
+bilibili/spiders/__pycache__/*.pyc
