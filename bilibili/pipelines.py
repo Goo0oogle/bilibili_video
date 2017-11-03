@@ -51,7 +51,7 @@ class PostgrePipeline(object):
                 username,\
                 userimgsrc,\
                 usercontent\
-            ) values ('%s', '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
+            ) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
             %(
                 item['Id'],
                 item['Title'],
