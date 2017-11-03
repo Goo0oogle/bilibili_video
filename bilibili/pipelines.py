@@ -70,4 +70,5 @@ class PostgrePipeline(object):
                 item['Usercontent']
             )
         )
+        self.db.commit()
         print('items has been processed...')
