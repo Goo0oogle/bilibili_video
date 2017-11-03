@@ -62,5 +62,39 @@ class BilibiliSpider(Spider):
             item['Usercontent'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[2]/text()').extract()[0]
         except IndexError:
             item['Usercontent'] = ''
-        yield item
+        
+        print(
+            "insert into videoinfo\
+            (\
+                id,\
+                title,\
+                date,\
+                plays,\
+                comments,\
+                coins,\
+                collects,\
+                videosrc,\
+                content,\
+                imgsrc,\
+                username,\
+                userimgsrc,\
+                usercontent\
+            ) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
+            %(
+                item['Id'],
+                item['Title'],
+                item['Date'],
+                item['Plays'],
+                item['Comments'],
+                item['Coins'],
+                item['Collects'],
+                item['Videosrc'],
+                item['Content'],
+                item['Imgsrc'],
+                item['Username'],
+                item['Userimgsrc'],
+                item['Usercontent']
+            )
+        )
+        # yield item
         
