@@ -35,24 +35,8 @@ class PostgrePipeline(object):
         print('Cursor is creating...')
         self.cursor = self.db.cursor()
         print('processing items...') 
-        # self.cursor.execute(
-        print(
-            "insert into videoinfo\
-            (\
-                id,\
-                title,\
-                date,\
-                plays,\
-                comments,\
-                coins,\
-                collects,\
-                videosrc,\
-                content,\
-                imgsrc,\
-                username,\
-                userimgsrc,\
-                usercontent\
-            ) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
+        self.cursor.execute(
+            "insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
             %(
                 item['Id'],
                 item['Title'],

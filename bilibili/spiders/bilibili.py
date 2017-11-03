@@ -17,7 +17,7 @@ class BilibiliSpider(Spider):
     def parse(self, response):
         select = Selector(response)
         items_urls = select.xpath('//*[@id="primary_menu"]/ul/li/a/@href').extract()
-        for items_url in items_urls[0]:
+        for items_url in items_urls[0:2]:
             yield Request(
                 url='https:' + items_url,
                 callback=self.parse_item,
@@ -27,7 +27,7 @@ class BilibiliSpider(Spider):
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
         av = re.compile('//www.bilibili.com/video/av(.*)/')
-        for item_url in item_urls[1000]:
+        for item_url in item_urls[0:50]:
             if av.match(item_url):
                 Id = av.split(item_url)[1]
                 yield Request(
@@ -62,39 +62,5 @@ class BilibiliSpider(Spider):
             item['Usercontent'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[2]/text()').extract()[0]
         except IndexError:
             item['Usercontent'] = ''
-        
-        print(
-            "insert into videoinfo\
-            (\
-                id,\
-                title,\
-                date,\
-                plays,\
-                comments,\
-                coins,\
-                collects,\
-                videosrc,\
-                content,\
-                imgsrc,\
-                username,\
-                userimgsrc,\
-                usercontent\
-            ) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
-            %(
-                item['Id'],
-                item['Title'],
-                item['Date'],
-                item['Plays'],
-                item['Comments'],
-                item['Coins'],
-                item['Collects'],
-                item['Videosrc'],
-                item['Content'],
-                item['Imgsrc'],
-                item['Username'],
-                item['Userimgsrc'],
-                item['Usercontent']
-            )
-        )
-        # yield item
+        yield item
         
