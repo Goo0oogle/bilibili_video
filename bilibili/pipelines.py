@@ -18,6 +18,13 @@ class PostgrePipeline(object):
         print('Postgresql is starting...')
 
     def open_spider(self, spider):
+        print('Ready!')
+    
+    def close_spider(self, spider):
+        print('Done!')
+
+    def process_item(self, item, spider):
+        print('Database is connecting...')
         self.db = psycopg2.connect(
             database='videoinfodb',
             user='ubuntu',
@@ -25,17 +32,8 @@ class PostgrePipeline(object):
             host='111.230.15.157',
             port='5432'
         )
-        print('Database is connecting...')
-        self.cursor = self.db.cursor()
         print('Cursor is creating...')
-    
-    def close_spider(self, spider):
-        self.db.commit()
-        print('Changes has been committed...')
-        self.db.close()
-        print('Database is closing...')
-
-    def process_item(self, item, spider):
+        self.cursor = self.db.cursor()
         print('processing items...') 
         self.cursor.execute(
             "insert into videoinfo\
@@ -72,3 +70,7 @@ class PostgrePipeline(object):
         )
         self.db.commit()
         print('items has been processed...')
+        self.db.commit()
+        print('Changes has been committed...')
+        print('Database is closing...')
+        self.db.close()
