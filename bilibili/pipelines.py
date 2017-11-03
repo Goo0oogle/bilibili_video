@@ -35,25 +35,29 @@ class PostgrePipeline(object):
         print('Cursor is creating...')
         self.cursor = self.db.cursor()
         print('processing items...') 
-        self.cursor.execute(
-            "insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
-            %(
-                item['Id'],
-                item['Title'],
-                item['Date'],
-                item['Plays'],
-                item['Comments'],
-                item['Coins'],
-                item['Collects'],
-                item['Videosrc'],
-                item['Content'],
-                item['Imgsrc'],
-                item['Username'],
-                item['Userimgsrc'],
-                item['Usercontent']
+        try:
+            self.cursor.execute(
+                "insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
+                %(
+                    item['Id'],
+                    item['Title'],
+                    item['Date'],
+                    item['Plays'],
+                    item['Comments'],
+                    item['Coins'],
+                    item['Collects'],
+                    item['Videosrc'],
+                    item['Content'],
+                    item['Imgsrc'],
+                    item['Username'],
+                    item['Userimgsrc'],
+                    item['Usercontent']
+                )
             )
-        )
-        self.db.commit()
+        except psycopg2.ProgrammingError as err:
+            print('raise an error:' + err.message)
+        else:    
+            self.db.commit()
         print('items has been processed...')
         self.db.commit()
         print('Changes has been committed...')
