@@ -27,7 +27,7 @@ class BilibiliSpider(Spider):
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
         av = re.compile('//www.bilibili.com/video/av(.*)/')
-        for item_url in item_urls[100]:
+        for item_url in item_urls[1000]:
             if av.match(item_url):
                 Id = av.split(item_url)[1]
                 yield Request(
