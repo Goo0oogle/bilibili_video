@@ -55,7 +55,7 @@ class PostgrePipeline(object):
                 )
             )
         except psycopg2.ProgrammingError as err:
-            print('raise an error:' + err)
+            print('Raise an error...')
         else:    
             self.db.commit()
         print('items has been processed...')
