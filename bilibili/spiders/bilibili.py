@@ -58,6 +58,9 @@ class BilibiliSpider(Spider):
         item['Imgsrc'] = 'https:' + select.xpath('/html/body/img/@src').extract()[0]
         item['Username'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[1]/a[1]/text()').extract()[0]
         item['Userimgsrc'] = 'https:' + select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[1]/a[1]/img/@src').extract()[0]
-        item['Usercontent'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[2]/text()').extract()[0]
+        try:
+            item['Usercontent'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[2]/text()').extract()[0]
+        except IndexError:
+            item['Usercontent'] = ''
         yield item
         
