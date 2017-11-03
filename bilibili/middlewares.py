@@ -14,11 +14,11 @@ import time
 class PhantomJSMiddleware(object):
     @classmethod
     def process_request(self, request, spider):
-        driver = webdriver.PhantomJS()
+        driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
         print("PhantomJS is starting...")
         driver.get(request.url)
         print("访问 " + request.url)
-        driver.find_element_by_name("play_button").click()
+        # driver.find_element_by_name("play_button").click()
         time.sleep(1)
         print("点击了播放按钮")
         content = driver.page_source.encode('utf-8')
