@@ -17,7 +17,7 @@ class BilibiliSpider(Spider):
     def parse(self, response):
         select = Selector(response)
         items_urls = select.xpath('//*[@id="primary_menu"]/ul/li/a/@href').extract()
-        for items_url in items_urls[0:2]:
+        for items_url in items_urls:
             yield Request(
                 url='https:' + items_url,
                 callback=self.parse_item,
@@ -27,7 +27,7 @@ class BilibiliSpider(Spider):
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
         av = re.compile('//www.bilibili.com/video/av(.*)/')
-        for item_url in item_urls[0:50]:
+        for item_url in item_urls:
             if av.match(item_url):
                 Id = av.split(item_url)[1]
                 yield Request(
