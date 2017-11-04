@@ -22,7 +22,7 @@ class RandomUserAgent(UserAgentMiddleware):
         self.user_agent = user_agent
 
     def process_request(self, request, spider):
-        print('='*11 + ' User-Agent ' + '='*11)
+        print('='*12 + ' User-Agent ' + '='*12)
         print('> Randoming User-Agent...')
         user_agent = random.choice(USER_AGENTS)
         print('> Select User-Agent: %s'%user_agent)
