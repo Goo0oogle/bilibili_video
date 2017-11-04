@@ -2,11 +2,16 @@
 from scrapy import Selector
 from scrapy import Request
 from scrapy.spiders import Spider
+from scrapy.spiders import CrawlSpider
+from scrapy.spiders import Rule
+from scrapy.linkextractors import LinkExtractor
 import re
 import time
 
 from bilibili.items import BilibiliItem
 
+
+# Spider
 class BilibiliSpider(Spider):
     name = 'bilibili'
     allowed_domains = ['bilibili.com']
@@ -15,15 +20,21 @@ class BilibiliSpider(Spider):
     ]
 
     def parse(self, response):
+        print('='*12 + '  Spider  ' + '='*12)
+        print('> Spider is parsing...')
         select = Selector(response)
         items_urls = select.xpath('//*[@id="primary_menu"]/ul/li/a/@href').extract()
+        video = re.compile('//www.bilibili.com/video/(.*).html')
         for items_url in items_urls:
-            yield Request(
-                url='https:' + items_url,
-                callback=self.parse_item,
-            )
+            if video.match(items_url):
+                yield Request(
+                    url='https:' + items_url,
+                    callback=self.parse_items,
+                )
 
-    def parse_item(self, response):
+    def parse_items(self, response):
+        print('='*12 + '  Spider  ' + '='*12)
+        print('[%s]> Spider is parsing items...'%(response.url.split('.')[2].split('/')[-1])
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
         av = re.compile('//www.bilibili.com/video/av(.*)/')
@@ -39,6 +50,8 @@ class BilibiliSpider(Spider):
                 )
 
     def parse_details(self, response):
+        print('='*12 + '  Spider  ' + '='*12)
+        print('[%s]> Spider is parsing Details...'%(response.url.split('/')[-2]))
         select = Selector(response)
         item = BilibiliItem()
         item['Id'] = response.meta['Id']
@@ -67,3 +80,23 @@ class BilibiliSpider(Spider):
             item['Usercontent'] = ''
         yield item
         
+
+# CrawlSpider
+class BilibiliCrawlSpider(CrawlSpider):
+    print('='*12 + '  Spider  ' + '='*12)
+    print('> Spider is initing...')
+    name = 'bilibilicrawl'
+    allowed_domains = ['bilibili.com']
+    start_urls = [
+        "https://www.bilibili.com/"
+    ]
+    rules = [
+        Rule(LinkExtractor(allow=[r'//www.bilibili.com/video/av(.*)/']), 'parse_item')
+    ]
+
+    def parse_item(self, response):
+        print('='*12 + '  Spider  ' + '='*12)
+        print('> Spider is parsing...')
+        item = BilibiliItem()
+        item['Id'] = response.url
+        yield item

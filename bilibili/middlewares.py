@@ -9,18 +9,37 @@ from scrapy import signals
 from selenium import webdriver
 from scrapy.http import HtmlResponse
 import time
+import random
 
 
 class PhantomJSMiddleware(object):
     @classmethod
     def process_request(self, request, spider):
-        driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
         print('='*12 + ' PhantomJS ' + '='*12)
         print("> PhantomJS is starting...")
-        driver.get(request.url)
+        driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+        
         print('='*12 + ' PhantomJS ' + '='*12)
         print("> 访问 " + request.url)
+        driver.get(request.url)
+
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> Random sleeping...")
+        time.sleep(abs(random.gauss(1, 0.3)))
+
+        print("> JavaScript is loading...")
+        js = "document.documentElement.scrollTop=10000"
+        driver.execute_script(js)
+
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> Random sleeping...")
+        time.sleep(abs(random.gauss(4, 1)))
+        
+        print("> Getting page Content...")
         content = driver.page_source.encode('utf-8')
+        
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is closing...")
         driver.quit()
         return HtmlResponse(request.url, encoding='utf-8', body=content, request=request)
 
