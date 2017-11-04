@@ -43,7 +43,10 @@ class BilibiliSpider(Spider):
         item = BilibiliItem()
         item['Id'] = response.meta['Id']
         item['Title'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[1]/div[1]/h1/text()').extract()[0]
-        item['Date'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[1]/div[3]/time/i/text()').extract()[0]
+        try:
+            item['Date'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[1]/div[3]/time/i/text()').extract()[0]
+        except IndexError:
+            item['Date'] = ''
         Plays = select.xpath('//*[@id="viewbox_report"]/div[1]/div[4]/div[1]/@title').extract()[0]
         item['Plays'] = re.findall('([0-9]+)', Plays)[0]
         Comments = select.xpath('//*[@id="viewbox_report"]/div[1]/div[4]/div[2]/@title').extract()[0]
