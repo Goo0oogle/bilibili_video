@@ -34,7 +34,7 @@ class BilibiliSpider(Spider):
 
     def parse_items(self, response):
         print('='*12 + '  Spider  ' + '='*12)
-        print('[%s]> Spider is parsing items...'%(response.url.split('.')[2].split('/')[-1])
+        print('[%s]> Spider is parsing items...'%(response.url.split('.')[2].split('/')[-1]))
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
         av = re.compile('//www.bilibili.com/video/av(.*)/')
