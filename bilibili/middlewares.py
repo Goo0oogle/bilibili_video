@@ -10,6 +10,7 @@ from selenium.common.exceptions import TimeoutException
 from scrapy.http import HtmlResponse
 from scrapy.contrib.downloadermiddleware.useragent import UserAgentMiddleware
 from bilibili.settings import USER_AGENTS
+from bilibili.settings import HTTP_PROXIES
 
 import time
 import random
@@ -26,6 +27,16 @@ class RandomUserAgent(UserAgentMiddleware):
         user_agent = random.choice(USER_AGENTS)
         print('> Select User-Agent: %s'%user_agent)
         request.headers.setdefault('User-Agent', user_agent)
+
+
+class RandomHttpProxy(object):
+    def process_request(self, request, spider):
+        print('='*12 + ' Http-Proxy ' + '='*12)
+        print('> Randoming Http-Proxy...')
+        http_proxy = random.choice(HTTP_PROXIES)
+        print('> Select Http-Proxy: %s'%http_proxy)
+        request.meta['proxy'] = http_proxy
+        
         
 class PhantomJSMiddleware(object):
     @classmethod

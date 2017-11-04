@@ -26,6 +26,17 @@ USER_AGENTS = [
     'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36'
 ]
 
+HTTP_PROXIES = [
+    '127.0.0.1:8888',
+    '121.8.170.53:9797',
+    '180.173.63.193:53281',
+    '61.163.39.70:9999',
+    '180.168.179.193:8080',
+    '122.224.227.202:3128',
+    '61.135.217.7:80',
+    '121.31.101.248:8123',
+]
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
@@ -63,6 +74,7 @@ COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
     'bilibili.middlewares.RandomUserAgent': 0,
+    'bilibili.middlewares.RandomHttpProxy': 10,
     'bilibili.middlewares.PhantomJSMiddleware': 543,
 }
 
