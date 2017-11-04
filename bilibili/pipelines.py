@@ -37,7 +37,7 @@ class PostgrePipeline(object):
         print('processing items...') 
         try:
             self.cursor.execute(
-                "insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
+                r"insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
                 %(
                     item['Id'],
                     item['Title'],
