@@ -15,16 +15,20 @@ class BilibiliPipeline(object):
 class PostgrePipeline(object):
     def __init__(self, *args):
         super(PostgrePipeline, self).__init__(*args)
-        print('Postgresql is starting...')
+        print('='*12 + '  Postgre  ' + '='*12)
+        print('> Postgresql is starting...')
 
     def open_spider(self, spider):
-        print('Ready!')
+        print('='*12 + '  Postgre  ' + '='*12)
+        print('> Ready!')
     
     def close_spider(self, spider):
-        print('Done!')
+        print('='*12 + '  Postgre  ' + '='*12)
+        print('> Done!')
 
     def process_item(self, item, spider):
-        print('Database is connecting...')
+        print('='*12 + '  Postgre  ' + '='*12)
+        print('> Database is connecting...')
         self.db = psycopg2.connect(
             database='videoinfodb',
             user='ubuntu',
@@ -32,9 +36,9 @@ class PostgrePipeline(object):
             host='111.230.15.157',
             port='5432'
         )
-        print('Cursor is creating...')
+        print('> Cursor is creating...')
         self.cursor = self.db.cursor()
-        print('processing items...') 
+        print('> processing items...') 
         try:
             self.cursor.execute(
                 r"insert into videoinfo(id,title,date,plays,comments,coins,collects,videosrc,content,imgsrc,username,userimgsrc,usercontent) values (%s, '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', '%s', '%s', '%s')"
@@ -55,11 +59,11 @@ class PostgrePipeline(object):
                 )
             )
         except psycopg2.ProgrammingError as err:
-            print('Raise an error...')
+            print('>> Raise an error...')
         else:    
             self.db.commit()
-        print('items has been processed...')
+        print('> items has been processed...')
         self.db.commit()
-        print('Changes has been committed...')
-        print('Database is closing...')
+        print('> Changes has been committed...')
+        print('> Database is closing...')
         self.db.close()

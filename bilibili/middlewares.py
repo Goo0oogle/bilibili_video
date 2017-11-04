@@ -15,11 +15,11 @@ class PhantomJSMiddleware(object):
     @classmethod
     def process_request(self, request, spider):
         driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
-        print("PhantomJS is starting...")
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is starting...")
         driver.get(request.url)
-        print("访问 " + request.url)
-        # driver.find_element_by_name("play_button").click()
-        # print("点击了播放按钮")
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> 访问 " + request.url)
         content = driver.page_source.encode('utf-8')
         driver.quit()
         return HtmlResponse(request.url, encoding='utf-8', body=content, request=request)

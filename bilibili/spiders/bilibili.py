@@ -11,7 +11,6 @@ class BilibiliSpider(Spider):
     allowed_domains = ['bilibili.com']
     start_urls = [
         "https://www.bilibili.com/"
-        # "https://www.bilibili.com/video/av15924319/"
     ]
 
     def parse(self, response):
