@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 from scrapy import Selector
 from scrapy import Request
+from scrapy import signals
 from scrapy.spiders import Spider
 from scrapy.spiders import CrawlSpider
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
-import re
-import time
+from scrapy.xlib.pydispatch import dispatcher
+
+from selenium import webdriver
 
 from bilibili.items import BilibiliItem
+
+import re
+import time
+import random
 
 
 # Spider
@@ -18,6 +24,19 @@ class BilibiliSpider(Spider):
     start_urls = [
         "https://www.bilibili.com/"
     ]
+
+    def __init__(self):
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is starting...")
+        self.driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+        self.driver.set_page_load_timeout(30)
+        super(BilibiliSpider, self).__init__()
+        dispatcher.connect(self.spider_closed,signals.spider_closed)
+
+    def spider_closed(self, spider):
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is closing...")
+        self.driver.quit()
 
     def parse(self, response):
         print('='*12 + '  Spider  ' + '='*12)
@@ -52,6 +71,8 @@ class BilibiliSpider(Spider):
     def parse_details(self, response):
         print('='*12 + '  Spider  ' + '='*12)
         print('[%s]> Spider is parsing Details...'%(response.url.split('/')[-2]))
+        print("> Random sleeping...")
+        time.sleep(abs(random.gauss(3, 0.5)))
         select = Selector(response)
         item = BilibiliItem()
         item['Id'] = response.meta['Id']
@@ -93,10 +114,24 @@ class BilibiliCrawlSpider(CrawlSpider):
     rules = [
         Rule(LinkExtractor(allow=[r'//www.bilibili.com/video/av(.*)/']), 'parse_item')
     ]
+    def __init__(self):
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is starting...")
+        self.driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+        self.driver.set_page_load_timeout(30)
+        super(BilibiliCrawlSpider, self).__init__()
+        dispatcher.connect(self.spider_closed,signals.spider_closed)
+
+    def spider_closed(self, spider):
+        print('='*12 + ' PhantomJS ' + '='*12)
+        print("> PhantomJS is closing...")
+        self.driver.quit()
 
     def parse_item(self, response):
         print('='*12 + '  Spider  ' + '='*12)
         print('> Spider is parsing...')
+        print("> Random sleeping...")
+        time.sleep(abs(random.gauss(3, 0.5)))
         item = BilibiliItem()
         item['Id'] = response.url
         yield item

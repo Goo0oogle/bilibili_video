@@ -6,41 +6,58 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from scrapy.http import HtmlResponse
+from scrapy.contrib.downloadermiddleware.useragent import UserAgentMiddleware
+from bilibili.settings import USER_AGENTS
+
 import time
 import random
 
 
+class RandomUserAgent(UserAgentMiddleware):
+    def __init__(self, user_agent=''):
+        super(RandomUserAgent, self).__init__()
+        self.user_agent = user_agent
+
+    def process_request(self, request, spider):
+        print('='*11 + ' User-Agent ' + '='*11)
+        print('> Randoming User-Agent...')
+        user_agent = random.choice(USER_AGENTS)
+        print('> Select User-Agent: %s'%user_agent)
+        request.headers.setdefault('User-Agent', user_agent)
+        
 class PhantomJSMiddleware(object):
     @classmethod
     def process_request(self, request, spider):
         print('='*12 + ' PhantomJS ' + '='*12)
-        print("> PhantomJS is starting...")
-        driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
-        
-        print('='*12 + ' PhantomJS ' + '='*12)
         print("> 访问 " + request.url)
-        driver.get(request.url)
+        try:
+            spider.driver.get(request.url)
+        except TimeoutException:
+            print('='*12 + ' PhantomJS ' + '='*12)
+            print("> 访问 " + request.url + " 超时")
+            spider.driver.execute_script('window.stop()')
 
         print('='*12 + ' PhantomJS ' + '='*12)
         print("> Random sleeping...")
         time.sleep(abs(random.gauss(1, 0.3)))
 
         print("> JavaScript is loading...")
-        js = "document.documentElement.scrollTop=10000"
-        driver.execute_script(js)
+        js = "window.scrollTo(0, document.body.scrollHeight/20*{});"
+        for i in range(20):
+            print('='*12 + ' PhantomJS ' + '='*12)
+            print("[%3d"%((i+1)*5) + "%]> Random sleeping...")
+            time.sleep(abs(random.gauss(0.5, 0.1)))
+            spider.driver.execute_script(js.format(i+1))
 
         print('='*12 + ' PhantomJS ' + '='*12)
-        print("> Random sleeping...")
-        time.sleep(abs(random.gauss(4, 1)))
+        print("> JavaScript is loaded...")
+        time.sleep(abs(random.gauss(1, 0.3)))
         
         print("> Getting page Content...")
-        content = driver.page_source.encode('utf-8')
+        content = spider.driver.page_source.encode('utf-8')
         
-        print('='*12 + ' PhantomJS ' + '='*12)
-        print("> PhantomJS is closing...")
-        driver.quit()
         return HtmlResponse(request.url, encoding='utf-8', body=content, request=request)
 
 
