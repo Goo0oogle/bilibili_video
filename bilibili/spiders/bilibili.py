@@ -3,6 +3,7 @@ from scrapy import Selector
 from scrapy import Request
 from scrapy.spiders import Spider
 import re
+import time
 
 from bilibili.items import BilibiliItem
 
@@ -45,7 +46,7 @@ class BilibiliSpider(Spider):
         try:
             item['Date'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[1]/div[3]/time/i/text()').extract()[0]
         except IndexError:
-            item['Date'] = ''
+            item['Date'] = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
         Plays = select.xpath('//*[@id="viewbox_report"]/div[1]/div[4]/div[1]/@title').extract()[0]
         item['Plays'] = re.findall('([0-9]+)', Plays)[0]
         Comments = select.xpath('//*[@id="viewbox_report"]/div[1]/div[4]/div[2]/@title').extract()[0]
