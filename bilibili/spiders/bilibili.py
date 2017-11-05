@@ -71,8 +71,8 @@ class BilibiliSpider(Spider):
     def parse_details(self, response):
         print('='*12 + '  Spider  ' + '='*12)
         print('[%s]> Spider is parsing Details...'%(response.url.split('/')[-2]))
-        print("> Random sleeping...")
-        time.sleep(abs(random.gauss(3, 0.5)))
+        # print("> Random sleeping...")
+        # time.sleep(abs(random.gauss(3, 0.5)))
         select = Selector(response)
         item = BilibiliItem()
         item['Id'] = response.meta['Id']

@@ -12,6 +12,7 @@ from scrapy.contrib.downloadermiddleware.useragent import UserAgentMiddleware
 from bilibili.settings import USER_AGENTS
 from bilibili.settings import HTTP_PROXIES
 
+import sys
 import time
 import random
 
@@ -46,23 +47,25 @@ class PhantomJSMiddleware(object):
         try:
             spider.driver.get(request.url)
         except TimeoutException:
-            print('='*12 + ' PhantomJS ' + '='*12)
+            # print('='*12 + ' PhantomJS ' + '='*12)
             print("> 访问 " + request.url + " 超时")
             spider.driver.execute_script('window.stop()')
 
-        print('='*12 + ' PhantomJS ' + '='*12)
+        # print('='*12 + ' PhantomJS ' + '='*12)
         print("> Random sleeping...")
         time.sleep(abs(random.gauss(1, 0.3)))
 
-        print("> JavaScript is loading...")
+        print("> Start loading javaScript...")
         js = "window.scrollTo(0, document.body.scrollHeight/20*{});"
         for i in range(20):
-            print('='*12 + ' PhantomJS ' + '='*12)
-            print("[%3d"%((i+1)*5) + "%]> Random sleeping...")
+            # print('='*12 + ' PhantomJS ' + '='*12)
+            sys.stdout.write("[%3d"%((i+1)*5) + "%]> JavaScript is loading...\r")
+            sys.stdout.flush()
             time.sleep(abs(random.gauss(0.5, 0.1)))
             spider.driver.execute_script(js.format(i+1))
 
-        print('='*12 + ' PhantomJS ' + '='*12)
+        sys.stdout.write('\n')
+        # print('='*12 + ' PhantomJS ' + '='*12)
         print("> JavaScript is loaded...")
         time.sleep(abs(random.gauss(1, 0.3)))
         

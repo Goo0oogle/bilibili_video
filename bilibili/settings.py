@@ -49,22 +49,35 @@ HTTP_PROXIES = [
     '175.17.1.6:8080',
 ]
 
+LOG_ENABLED = True
+LOG_ENCODING = 'utf-8'
+LOG_STDOUT = False
+LOG_LEVEL = 'INFO'
+LOG_FILE = None
+
+RETRY_ENABLED = True
+RETRY_TIMES = 2 # initial response + 2 retries = 3 requests
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_ITEMS = 100
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 3
+RANDOMIZE_DOWNLOAD_DELAY = True
+DOWNLOAD_TIMEOUT = 180
 # The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = False
+COOKIES_DEBUG = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -99,7 +112,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'bilibili.pipelines.PostgrePipeline': 300,
+#     'bilibili.pipelines.PostgrePipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
