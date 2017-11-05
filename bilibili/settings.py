@@ -91,7 +91,7 @@ COOKIES_DEBUG = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'bilibili.middlewares.BilibiliSpiderMiddleware': 543,
+   'bilibili.middlewares.BilibiliSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
