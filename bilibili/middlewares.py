@@ -6,7 +6,8 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-from selenium.common.exceptions import TimeoutException
+# from selenium.common.exceptions import TimeoutException
+from urllib.error import URLError
 from scrapy.http import HtmlResponse
 from scrapy.contrib.downloadermiddleware.useragent import UserAgentMiddleware
 from bilibili.settings import USER_AGENTS
@@ -46,10 +47,12 @@ class PhantomJSMiddleware(object):
         print("> 访问 " + request.url)
         try:
             spider.driver.get(request.url)
-        except TimeoutException:
+        except URLError:
             # print('='*12 + ' PhantomJS ' + '='*12)
-            print("> 访问 " + request.url + " 超时")
+            print("> 访问 " + request.url + " 被拒绝")
             spider.driver.execute_script('window.stop()')
+            print("> 访问暂停")
+            time.sleep(30)
 
         # print('='*12 + ' PhantomJS ' + '='*12)
         print("> Random sleeping...")
