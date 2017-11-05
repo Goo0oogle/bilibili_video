@@ -56,12 +56,12 @@ class BilibiliSpider(Spider):
         print('[%s]> Spider is parsing items...'%(response.url.split('.')[2].split('/')[-1]))
         select = Selector(response)
         item_urls = select.xpath('//a[@target="_blank"]/@href').extract()
-        av = re.compile('//www.bilibili.com/video/av(.*)/')
+        av = re.compile('/video/av(.*)')
         for item_url in item_urls:
             if av.match(item_url):
                 Id = av.split(item_url)[1]
                 yield Request(
-                    url= 'https:' + item_url,
+                    url= 'https://www.bilibili.com' + item_url,
                     meta={
                         'Id': Id,
                     },
@@ -109,7 +109,8 @@ class BilibiliCrawlSpider(CrawlSpider):
     name = 'bilibilicrawl'
     allowed_domains = ['bilibili.com']
     start_urls = [
-        "https://www.bilibili.com/"
+        # "https://www.bilibili.com/"
+        "https://www.bilibili.com/video/game.html"
     ]
     rules = [
         Rule(LinkExtractor(allow=[r'//www.bilibili.com/video/av(.*)/']), 'parse_item')
