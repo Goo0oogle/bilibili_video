@@ -89,7 +89,7 @@ class BilibiliSpider(Spider):
         item['Coins'] = re.findall('[0-9]+', Coins)[0]
         Collects = select.xpath('//*[@id="viewbox_report"]/div[1]/div[4]/div[5]/@title').extract()[0]
         item['Collects'] = re.findall('[0-9]+', Collects)[0]
-        # item['Videosrc'] = select.xpath('/html/body/div[4]/div[2]/div[3]/div[1]/div/div[1]/div[2]/div[5]/video/@src').extract()[0]
+        # item['Videosrc'] = select.xpath('//*[@id="bilibiliPlayer"]/div[1]/div[2]/div[6]/video/@src').extract()[0]
         item['Videosrc'] = 'TODO'
         item['Content'] = select.xpath('//*[@id="v_desc"]/text()').extract()[0]
         item['Imgsrc'] = 'https:' + select.xpath('/html/body/img/@src').extract()[0]
@@ -135,4 +135,6 @@ class BilibiliCrawlSpider(CrawlSpider):
         time.sleep(abs(random.gauss(3, 0.5)))
         item = BilibiliItem()
         item['Id'] = response.url
+        select = Selector(response)
+        item['Videosrc'] = select.xpath('//*[@id="bilibiliPlayer"]/div[1]/div[2]/div[6]/video/@src').extract()[0]
         yield item
