@@ -61,7 +61,7 @@ class BilibiliSpider(Spider):
             if av.match(item_url):
                 Id = av.split(item_url)[1]
                 yield Request(
-                    url= 'https://www.bilibili.com' + item_url,
+                    url= 'http://www.bilibili.com' + item_url,
                     meta={
                         'Id': Id,
                     },
@@ -92,9 +92,9 @@ class BilibiliSpider(Spider):
         # item['Videosrc'] = select.xpath('//*[@id="bilibiliPlayer"]/div[1]/div[2]/div[6]/video/@src').extract()[0]
         item['Videosrc'] = 'TODO'
         item['Content'] = select.xpath('//*[@id="v_desc"]/text()').extract()[0]
-        item['Imgsrc'] = 'https:' + select.xpath('/html/body/img/@src').extract()[0]
+        item['Imgsrc'] = select.xpath('/html/body/img/@src').extract()[0]
         item['Username'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[1]/a[1]/text()').extract()[0]
-        item['Userimgsrc'] = 'https:' + select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[1]/a[1]/img/@src').extract()[0]
+        item['Userimgsrc'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[1]/a[1]/img/@src').extract()[0]
         try:
             item['Usercontent'] = select.xpath('/html/body/div[4]/div[1]/div[2]/div[2]/div[2]/div[2]/text()').extract()[0]
         except IndexError:
